@@ -46,6 +46,7 @@ delay(void)
 #define   COM_LSR_TSRE	0x40	//   Transmitter off
 
 static bool serial_exists;
+int16_t CGA_COLOR_MASK = 0x0700;
 
 static int
 serial_proc_data(void)
@@ -164,7 +165,7 @@ cga_putc(int c)
 {
 	// if no attribute given, then use black on white
 	if (!(c & ~0xFF))
-		c |= 0x0700;
+		c |= CGA_COLOR_MASK;
 
 	switch (c & 0xff) {
 	case '\b':
@@ -197,7 +198,7 @@ cga_putc(int c)
 
 		memmove(crt_buf, crt_buf + CRT_COLS, (CRT_SIZE - CRT_COLS) * sizeof(uint16_t));
 		for (i = CRT_SIZE - CRT_COLS; i < CRT_SIZE; i++)
-			crt_buf[i] = 0x0700 | ' ';
+			crt_buf[i] = CGA_COLOR_MASK | ' ';
 		crt_pos -= CRT_COLS;
 	}
 
